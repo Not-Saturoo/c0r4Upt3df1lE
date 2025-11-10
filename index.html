@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>c0r4upt3df1l€</title>
+<style>
+@import url('https://fonts.cdnfonts.com/css/ds-digital');
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #000;
+    font-family: 'DS-Digital', sans-serif;
+    overflow: hidden;
+    color: #00ff9a;
+}
+
+.countdown-box {
+    background: #111;
+    padding: 25px 30px;
+    border-radius: 15px;
+    width: 340px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 0 25px #00ff9a88, inset 0 0 15px #00ff9a55;
+    transition: all 0.2s ease;
+}
+
+h1, h3, h5, .time, .labels {
+    transition: all 0.2s ease;
+}
+
+.time {
+    font-size: 42px;
+    letter-spacing: 3px;
+}
+
+.labels {
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+.glitch-line {
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    background: #ff0000;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+</style>
+</head>
+<body>
+
+<div class="countdown-box" id="box">
+    <h1 id="title">!! WARNING !!</h1>
+    <h3 id="subtitle">Countdown to Annie's Birthday</h3>
+    <h5 id="tminus">(Wait for the timer to end for a surprise)</h5>
+    <div class="time" id="countdown">00 : 00 : 00 : 00</div>
+    <div class="labels" id="labels">DAYS : HOURS : MINUTES : SECONDS</div>
+    <div class="glitch-line" id="line1"></div>
+    <div class="glitch-line" id="line2"></div>
+    <div class="glitch-line" id="line3"></div>
+</div>
+
+<script>
+const targetDate = new Date("November 30, 2025 10:00:00").getTime();
+const countdown = document.getElementById("countdown");
+const box = document.getElementById("box");
+const title = document.getElementById("title");
+const subtitle = document.getElementById("subtitle");
+const tminus = document.getElementById("tminus");
+const labels = document.getElementById("labels");
+
+const allTextElements = [countdown, title, subtitle, tminus, labels];
+const symbols = ['@','#','$','%','&','*','?','!', '+','~','>','<','^','S','s','A','a','E','e'];
+const glitchColors = ['#ff0000', '#00ff00', '#ff00ff', '#ffffff', '#ff66cc'];
+
+const lines = [
+    document.getElementById("line1"),
+    document.getElementById("line2"),
+    document.getElementById("line3")
+];
+
+function updateCountdown() {
+    const now = new Date().getTime();
+    const diff = targetDate - now;
+
+    if(diff <= 0) {
+        countdown.textContent = "00 : 00 : 00 : 00";
+        window.location.href = "https://not-saturoo.github.io/website-test/";
+        return;
+    }
+
+    const days = Math.floor(diff / (1000*60*60*24));
+    const hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+    const minutes = Math.floor((diff % (1000*60*60)) / (1000*60));
+    const seconds = Math.floor((diff % (1000*60)) / 1000);
+
+    countdown.textContent =
+        String(days).padStart(2,'0') + " : " +
+        String(hours).padStart(2,'0') + " : " +
+        String(minutes).padStart(2,'0') + " : " +
+        String(seconds).padStart(2,'0');
+}
+setInterval(updateCountdown, 1000);
+
+setInterval(() => {
+    title.style.color = title.style.color === 'red' ? '#00ff9a' : 'red';
+}, 500);
+
+function siteGlitch() {
+    const glitchDuration = Math.random()**2 * (1500 - 250) + 250;
+    const originalText = allTextElements.map(el => el.textContent);
+
+    lines.forEach(line => {
+        line.style.top = Math.random() * 100 + "%";
+        line.style.height = Math.random() * 5 + 2 + "px";
+        line.style.opacity = 1;
+        line.style.background = glitchColors[Math.floor(Math.random()*glitchColors.length)];
+    });
+
+    const glitchInterval = setInterval(() => {
+        box.style.transform = `translate(${Math.random()*80-40}px,${Math.random()*80-40}px) rotate(${Math.random()*30-15}deg)`;
+
+        allTextElements.forEach(el => {
+            el.textContent = el.textContent.split('').map(char => {
+                if(char === ' ' || char === ':' || char === '-') return char;
+                return symbols[Math.floor(Math.random()*symbols.length)];
+            }).join('');
+            el.style.transform = `translate(${Math.random()*30-15}px,${Math.random()*30-15}px) rotate(${Math.random()*20-10}deg) scale(${Math.random()*1.5+0.5})`;
+            el.style.color = glitchColors[Math.floor(Math.random()*glitchColors.length)];
+        });
+
+        box.style.boxShadow = `${Math.random()*60-30}px ${Math.random()*60-30}px 25px ${glitchColors[Math.floor(Math.random()*glitchColors.length)]}88`;
+
+        lines.forEach(line => {
+            line.style.top = Math.random() * 100 + "%";
+            line.style.height = Math.random() * 5 + 2 + "px";
+            line.style.background = glitchColors[Math.floor(Math.random()*glitchColors.length)];
+        });
+    }, 50);
+
+    setTimeout(() => {
+        clearInterval(glitchInterval);
+        allTextElements.forEach((el, i) => {
+            el.textContent = originalText[i];
+            el.style.transform = 'translate(0,0) rotate(0deg) scale(1)';
+            el.style.color = '#00ff9a';
+        });
+        box.style.transform = 'translate(0,0) rotate(0deg)';
+        box.style.boxShadow = '0 0 25px #00ff9a88, inset 0 0 15px #00ff9a55';
+        lines.forEach(line => line.style.opacity = 0);
+    }, glitchDuration);
+
+    const nextGlitch = 5000 + Math.random() * 2500;
+    setTimeout(siteGlitch, nextGlitch);
+}
+
+siteGlitch();
+</script>
+
+</body>
+</html>
